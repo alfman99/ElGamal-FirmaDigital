@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script type="text/javascript" src="http://latex.codecogs.com/latexit.js"></script>
+    <script src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <br>
+        <div class="row align-items-center">
+            <div class="col">
+                <h1>El Gamal firma digital</h1>
+            </div>
+            <div class="col-md-auto">
+                <button id="btnBorrarTodo" type="button" class="btn btn-danger">
+                    Borrar todo
+                </button>
+            </div>
+        </div>
+
+        <hr>
+
+        <h2>Parametros de la firma</h2>
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">Numero\,primo\enspace(p)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="primeNumber" type="number" min="0">
+            </div>
+            <div>
+                <label id="validPrime" class="mb-2"></label>
+            </div>
+        </form>
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">Numero\,aleatorio\,(g) \enspace (g &lt; p)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="randomNumber" type="number" min="0">
+            </div>
+            <div>
+                <label id="validRand" class="mb-2"></label>
+            </div>
+        </form>
+
+        <br>
+
+
+        <h3>Generacion clave</h3>
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">Clave\,privada\,(x) \enspace (1 &lt; x &lt; (p-2))</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="claveSecreta" type="number" min="0">
+            </div>
+            <div>
+                <label id="validClaveSecreta" class="mb-2"></label>
+            </div>
+        </form>
+
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">Clave\,publica\,(y) \enspace y = g^x (mod.\,p)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="valorY" type="number" min="0" readonly>
+
+            </div>
+            <button id="calcularValorY" class="mb-2">Calcular</button>
+            <div>
+                <label id="validValorY" class="mx-sm-3 mb-2"></label>
+            </div>
+        </form>
+
+
+        <br>
+
+        <h3>Clave publica compuesta de p, g, y: </h3>
+        <p id="clavePublicaP">p: no definido</p>
+        <p id="clavePublicaG">g: no definido</p>
+        <p id="clavePublicaY">y: no definido</p>
+
+        <h3 id="clavePrivada">Clave privada (x):</h3>
+        <p id="clavePrivadaX">x: no definida</p>
+
+        <hr>
+
+        <h2>Firma</h2>
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">Mensaje\,(m)\enspace(1 &lt; m &lt; p-2)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="mensaje" type="number" min="0">
+            </div>
+            <div>
+                <label id="validMensaje" class="mb-2"></label>
+            </div>
+        </form>
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">Numero\,aleatorio\,(k) \enspace (1 &lt; k &lt; (p-1))\,(k\perp (p-1))</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="numeroKrand" type="number" min="0">
+            </div>
+            <div>
+                <label id="validnumeroKrand" class="mb-2"></label>
+            </div>
+        </form>
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">Calcular\,(r) \enspace (r = g^k\,(mod. p))</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="numeroR" type="number" min="0" readonly>
+            </div>
+            <button id="calcularValorR" class="mb-2">Calcular</button>
+            <div>
+                <label id="validnumeroR" class="mx-sm-3 mb-2"></label>
+            </div>
+        </form>
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">Calcular\,(s) \enspace (s = (m - xr) k^{-1} \,(mod. (p-1)))</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="numeroS" type="number" min="0" readonly>
+            </div>
+            <button id="calcularValorS" class="mb-2">Calcular</button>
+            <div>
+                <label id="validnumeroS" class="mx-sm-3 mb-2"></label>
+            </div>
+        </form>
+
+        <h3>Firma compuesta de r, s: </h3>
+        <p id="firmaR">r: no definido</p>
+        <p id="firmaS">s: no definido</p>
+
+        <hr>
+
+
+        <h2>Verificar firma (automatico)</h2>
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2 mx-sm-3">
+                <label
+                    lang="latex">(0&lt;r&lt;p\enspaceand\enspace0&lt;s&lt;p-1)\enspace\&\enspace(g^m \equiv y^rr^s)</label>
+            </div>
+            <button id="validSignature" class="mb-2">Comprobar</button>
+            <div class="mb-2">
+                <label lang="latex" id="verifySignature" class="mx-sm-3"></label>
+            </div>
+        </form>
+
+        <hr>
+
+        <h2>Verificar firma (manual)</h2>
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">p\enspace(numero\,primo\,utilizado)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="manualP" type="number" min="0"><br>
+            </div>
+        </form>
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">g\enspace(numero\,aleatorio)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="manualG" type="number" min="0"><br>
+            </div>
+        </form>
+
+
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">m\enspace(mensaje)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="manualM" type="number" min="0"><br>
+            </div>
+        </form>
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">y\enspace(clave\,publica)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="manualY" type="number" min="0"><br>
+            </div>
+        </form>
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">r\enspace(numero\,calculado)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="manualR" type="number" min="0"><br>
+            </div>
+        </form>
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <div class="form-group mb-2">
+                <label lang="latex">s\enspace(numero\,calculado)</label>
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <input id="manualS" type="number" min="0"><br>
+            </div>
+        </form>
+
+
+        <form class="form-inline" action="javascript:void(0);">
+            <button id="validSignatureManual">Comprobar</button>
+        </form>
+        <br>
+        <p id="salidaManualComp"></p>
+
+
+
+        
+        <br>
+        <br>
+        <label lang="latex" id="verifySignatureManual"></label>
+    </div>
+    <script src="main.js"></script>
+
+</body>
+
+</html>
